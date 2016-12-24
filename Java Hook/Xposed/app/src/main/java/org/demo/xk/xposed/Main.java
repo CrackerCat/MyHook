@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Map;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -33,6 +34,7 @@ public class Main implements IXposedHookLoadPackage
             case "double":  return double.class;
             case "String":  return String.class;
             case "Map":     return Map.class;
+            case "List":    return List.class;
             case "boolean": return boolean.class;
             case "char":    return char.class;
 
@@ -44,6 +46,8 @@ public class Main implements IXposedHookLoadPackage
     {
         protected void beforeHookedMethod(MethodHookParam param) throws Throwable
         {
+            XposedBridge.log("[*] target hook successfully.....");
+
             for (int i = 0; i < param.args.length; i++)
                 XposedBridge.log("\r\n> arg[" + i + "]:\r\n" + param.args[i]);
 
@@ -65,13 +69,9 @@ public class Main implements IXposedHookLoadPackage
             dbgstr += HexDumper.dumpHexString(param.args[1].toString().getBytes()) + "\r\n";
             dbgstr += "\r\n";
 
+            HexDumper.string2file("//sdcard//log.txt", dbgstr);
+
             XposedBridge.log(dbgstr);
-
-            File file = new File("/sdcard/", "log.txt");
-            file.createNewFile();
-            FileOutputStream in  = new FileOutputStream(file);
-            in.write(dbgstr.getBytes());
-
             // XposedBridge.log("> Ret : \r\n" + param.getResult());
         }
     };
@@ -161,7 +161,7 @@ public class Main implements IXposedHookLoadPackage
         if (!lpparam.packageName.equals(package_name))
             return;
 
-        XposedBridge.log("[*] com.target hook successfully.....");
+        XposedBridge.log("[*] args resolve successfully.....");
 
         Log.e("XK", "package_name:" + package_name);
         Log.e("XK", "class_name:" + class_name);
@@ -173,8 +173,3 @@ public class Main implements IXposedHookLoadPackage
         findAndHookMethod(class_name, lpparam.classLoader, function_name, args_obj);
     }
 }
-
-
-
-
-

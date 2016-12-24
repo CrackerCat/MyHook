@@ -1,5 +1,10 @@
 package org.demo.xk.xposed;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 public class HexDumper
 {
 
@@ -148,5 +153,30 @@ public class HexDumper
         }
 
         return buffer;
+    }
+
+    public static void string2file(String file, String conent)
+    {
+        BufferedWriter out = null;
+        try
+        {
+            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true)));
+            out.write(conent);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                out.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 }

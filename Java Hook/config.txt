@@ -1,4 +1,4 @@
-package_name:com.zjh.cmge
-class_name:cn.douwan.sdk.util.h
-function_name:b
-args_type:String,String
+package_name:com.duowan.kiwi
+class_name:com.yy.hiidostatis.inner.util.http.StatisHttpEncryptUtil
+function_name:sendContent
+args_type:String,String,int
