@@ -51,9 +51,7 @@ const char *libc_path = "/system/lib/libc.so";
 const char *linker_path = "/system/bin/linker";    
 #endif
 
-/*
-    使用 ptrace 读数据
-*/
+// PTRACE_PEEKTEXT 从内存地址中读取一个字节
 int ptrace_readdata(pid_t pid,  uint8_t *src, uint8_t *buf, size_t size)    
 {    
     long i, j, remain;    
@@ -88,9 +86,7 @@ int ptrace_readdata(pid_t pid,  uint8_t *src, uint8_t *buf, size_t size)
     return 0;
 }    
 
-/*
-    使用 ptrace 写数据
-*/
+// PTRACE_POKETEXT 往内存地址中写入一个字节
 int ptrace_writedata(pid_t pid, uint8_t *dest, uint8_t *data, size_t size)    
 {    
     long i, j, remain;    
@@ -128,7 +124,7 @@ int ptrace_writedata(pid_t pid, uint8_t *dest, uint8_t *data, size_t size)
     
     return 0;    
 }    
-    
+
 #if defined(__arm__) || defined(__aarch64__)
 int ptrace_call(pid_t pid, uintptr_t addr, long *params, int num_params, struct pt_regs* regs)    
 {    
@@ -225,7 +221,8 @@ long ptrace_call(pid_t pid, uintptr_t addr, long *params, int num_params, struct
 #else     
 #error "Not supported"    
 #endif    
-    
+
+// PTRACE_GETREGSET 读取寄存器值    
 int ptrace_getregs(pid_t pid, struct pt_regs * regs)    
 {    
 #if defined (__aarch64__)
@@ -250,7 +247,8 @@ int ptrace_getregs(pid_t pid, struct pt_regs * regs)
     return 0;   
 #endif     
 }    
-    
+
+// PTRACE_SETREGS 设置寄存器值
 int ptrace_setregs(pid_t pid, struct pt_regs * regs)    
 {     
 #if defined (__aarch64__)
@@ -275,9 +273,8 @@ int ptrace_setregs(pid_t pid, struct pt_regs * regs)
 #endif     
 }    
 
-/*
-    使用 ptrace 继续
-*/
+
+// PTRACE_CONT 继续执行
 int ptrace_continue(pid_t pid)    
 {    
     if (ptrace(PTRACE_CONT, pid, NULL, 0) < 0) {    
@@ -288,9 +285,7 @@ int ptrace_continue(pid_t pid)
     return 0;    
 }    
 
-/*
-    使用 ptrace 附加进程
-*/ 
+// PTRACE_ATTACH  跟踪指定pid 进程
 int ptrace_attach(pid_t pid)    
 {    
     if (ptrace(PTRACE_ATTACH, pid, NULL, 0) < 0) {    
@@ -304,9 +299,7 @@ int ptrace_attach(pid_t pid)
     return 0;    
 }    
 
-/*
-    使用ptrace执行
-*/
+// PTRACE_DETACH 结束跟踪
 int ptrace_detach(pid_t pid)    
 {    
     if (ptrace(PTRACE_DETACH, pid, NULL, 0) < 0) {    
@@ -317,11 +310,7 @@ int ptrace_detach(pid_t pid)
     return 0;    
 }    
 
-/*
-    get_module_base 获取模块基地址
-    pid -> 进程PID
-    module_name -> 模块名
-*/
+// 获取模块基地址
 void* get_module_base(pid_t pid, const char* module_name)    
 {    
     FILE *fp; 
@@ -361,23 +350,19 @@ void* get_module_base(pid_t pid, const char* module_name)
     return (void *)addr;    
 }
 
-/*
-    get_remote_add 获取待注入进程中函数地址
-    target_pid -> PID
-    module_name -> 模块路径
-    local_addr -> 对应函数地址
-*/
+
+// 获取待注入进程中函数地址
 void* get_remote_addr(pid_t target_pid, const char* module_name, void* local_addr)    
 {    
     void* local_handle, *remote_handle;    
     
     // 获取 [当前模块] 和 [待注入模块] 基地址
-    local_handle = get_module_base(-1, module_name);    
+    local_handle = get_module_base(-1, module_name);  // self process addr
     remote_handle = get_module_base(target_pid, module_name);    
     
     DEBUG_PRINT("[+] get_remote_addr: local[0x%08X], remote[0x%08X]\n", local_handle, remote_handle);    
     
-    // 对应函数地址 + 待注入进程模块基地址 - 当前模块基地址
+    // local_addr + (system/bin/linker addr) - (self process addr)
     void * ret_addr = (void *)((uintptr_t)local_addr + (uintptr_t)remote_handle - (uintptr_t)local_handle);    
     
 #if defined(__i386__)    
@@ -415,7 +400,6 @@ int find_pid_of(const char *process_name)
         if (id != 0) 
         {
             sprintf(filename, "/proc/%d/cmdline", id);
-
 
             fp = fopen(filename, "r");    
             if (fp) 
@@ -460,14 +444,12 @@ uint64_t ptrace_ip(struct pt_regs * regs)
 #endif    
 }    
 
-/*
-    ptrace_call_wrapper 
-    target_pid -> PID
-    func_name -> 函数名
-    parameters -> 参数
-    param_num -> 参数个数
-    regs -> 寄存器信息
-*/
+
+// target_pid
+// func_name      
+// parameters
+// param_num 
+// regs   寄存器信息
 int ptrace_call_wrapper(pid_t target_pid, const char * func_name, void * func_addr, long * parameters, int param_num, struct pt_regs * regs)     
 {    
     DEBUG_PRINT("[+] Calling %s in target process.\n", func_name);  
@@ -483,15 +465,12 @@ int ptrace_call_wrapper(pid_t target_pid, const char * func_name, void * func_ad
     return 0;    
 }    
 
-/*
-    函数：inject_remote_process
-    参数：target_pid -> pid
-          library_path -> 注入lib库 
-          function_name -> 函数名
-          param -> 参数
-          param_size -> 参数大小
-    返回：
-*/
+
+// target_pid
+// library_path
+// function_name  
+// param
+// param_size
 int inject_remote_process(pid_t target_pid, const char *library_path, const char *function_name, const char *param, size_t param_size)    
 {    
     int ret = -1;    
@@ -514,23 +493,25 @@ int inject_remote_process(pid_t target_pid, const char *library_path, const char
     
     DEBUG_PRINT("[+] Injecting process: %d\n", target_pid);    
     
+    // ptrace 跟踪指定进程
     if (ptrace_attach(target_pid) == -1)    
         goto exit;    
     
+    // ptrace 读取寄存器值
     if (ptrace_getregs(target_pid, &regs) == -1)    
         goto exit;    
     
-    // 保存原寄存器  
+    // 保存原寄存器环境 
     memcpy(&original_regs, &regs, sizeof(regs));    
     
-    // 得到mmap函数地址
+    // 获取进程mmap地址
     mmap_addr = get_remote_addr(target_pid, libc_path, (void *)mmap);    
     DEBUG_PRINT("[+] Remote mmap address: 0x%08X\n", mmap_addr);    
     
     /* call mmap */    
     parameters[0] = 0;  // addr    
     parameters[1] = 0x4000; // size    
-    parameters[2] = PROT_READ | PROT_WRITE | PROT_EXEC;  // prot  可读可写权限  
+    parameters[2] = PROT_READ | PROT_WRITE | PROT_EXEC;  // prot  可读|可写|可执行
     parameters[3] = MAP_ANONYMOUS | MAP_PRIVATE; // flags    
     parameters[4] = 0; //fd    
     parameters[5] = 0; //offset    
@@ -616,7 +597,7 @@ int main(int argc, char** argv)
 {
     pid_t target_pid;
 
-    // 查找进程PID
+    // get pid from /proc/cmdline
     target_pid = find_pid_of("ffx0.joy.crack1");
 
     if (-1 == target_pid) 
@@ -625,7 +606,7 @@ int main(int argc, char** argv)
         return -1;  
     }  
     
-    // 远程线程注入
+    // inject
     inject_remote_process(target_pid, "/data/local/tmp/libhello.so", "hook_entry",  "I'm parameter!", strlen("I'm parameter!"));    
     return 0;  
 }    
