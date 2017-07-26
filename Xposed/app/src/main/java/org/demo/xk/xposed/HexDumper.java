@@ -1,8 +1,12 @@
 package org.demo.xk.xposed;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 public class HexDumper
 {
-
     private final static char[] HEX_DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
     public static String dumpHexString(byte[] array)
@@ -148,5 +152,30 @@ public class HexDumper
         }
 
         return buffer;
+    }
+
+    public static void string2file(String file, String conent)
+    {
+        BufferedWriter out = null;
+        try
+        {
+            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true)));
+            out.write(conent);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                out.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 }
