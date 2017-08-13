@@ -1,4 +1,4 @@
-package_name:com.chengzi.BendiToutiao
-class_name:com.chengzi.BendiToutiao.model.entity.result.CountAllModel
-function_name:setSecurity
-args_type:String
+package_name:com.yixia.videoeditor
+class_name:com.yixia.videoeditor.commom.net.f.a
+function_name:DecodeResult
+args_type:byte[]

@@ -161,6 +161,8 @@ public class Main implements IXposedHookLoadPackage
         if (!lpparam.packageName.equals(package_name))
             return;
 
+        Log.d(TAG, "start hook ~");
+
         findAndHookMethod(class_name, lpparam.classLoader, function_name, args_obj);
     }
 }
