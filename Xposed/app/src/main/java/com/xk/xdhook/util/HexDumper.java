@@ -1,4 +1,4 @@
-package com.example.xk.xdhook.util;
+package com.xk.xdhook.util;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;

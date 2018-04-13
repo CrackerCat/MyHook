@@ -1,4 +1,4 @@
-package com.example.xk.xdhook.frontend;
+package com.xk.xdhook.frontend;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
