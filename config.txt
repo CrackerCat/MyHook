@@ -1,4 +1,4 @@
-package_name:com.gao7.android.weixin
-class_name:com.gao7.android.weixin.e.br
+package_name:com.ss.android.ugc.aweme
+class_name:com.ss.android.common.applog.j
 function_name:a
-args_type:Map
+args_type:byte[]
