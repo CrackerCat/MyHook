@@ -1,22 +1,23 @@
 package com.xk.xdhook.backend;
 
-import java.util.Map;
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.os.Bundle;
-
-import com.xk.xdhook.util.HexDumper;
 
 import java.io.File;
+import java.util.Map;
 import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-import de.robv.android.xposed.XC_MethodHook;
+import android.os.Bundle;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+
+import com.xk.xdhook.util.HexDumper;
+
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
 public class Main implements IXposedHookLoadPackage
@@ -49,44 +50,36 @@ public class Main implements IXposedHookLoadPackage
         }
     }
 
+
     public XC_MethodHook callback_fun = new XC_MethodHook()
     {
         protected void beforeHookedMethod(MethodHookParam param) throws Throwable
         {
             for (int i = 0; i < param.args.length; i++)
             {
-                if(param.args[i].getClass().getSimpleName() == "byte[]")
+                if(param.args[i].getClass().getSimpleName().equals("byte[]"))
                 {
-                    XposedBridge.log("[arg" + i + "]:\r\n" + param.args[i].toString());
-                    XposedBridge.log("[arg" + i + "]:\r\n" + HexDumper.toHexString(param.args[i].toString().getBytes()));
-                    XposedBridge.log("[arg" + i + "]:\r\n" + HexDumper.dumpHexString(param.args[i].toString().getBytes()));
-                    continue;
+                    XposedBridge.log("> arg_" + i + "_hex:" + HexDumper.toHexString((byte[])param.args[i]));
+                    XposedBridge.log("> arg_" + i + "_byte:\r\n" + HexDumper.dumpHexString((byte[])param.args[i]));
                 }
-
-                XposedBridge.log("[arg" + i + "]:\r\n" + param.args[i].toString());
+                else
+                    XposedBridge.log("> arg_" + i + "_str:" + param.args[i].toString());
             }
 
-//            RuntimeException e = new RuntimeException("run is here");
-//            e.fillInStackTrace();
-//            XposedBridge.log("> StackTrace:\r\n" + e);
+            RuntimeException e = new RuntimeException("run is here");
+            e.fillInStackTrace();
+            XposedBridge.log("> StackTrace:\r\n" + e);
         }
 
         protected void afterHookedMethod(MethodHookParam param) throws Throwable
         {
-//            for (int i = 0; i < param.args.length; i++)
-//            {
-//                if(param.args[i].getClass().getSimpleName() == "byte[]")
-//                {
-//                    XposedBridge.log("[arg" + i + "]:\r\n" + param.args[i].toString());
-//                    XposedBridge.log("[arg" + i + "]:\r\n" + HexDumper.toHexString(param.args[i].toString().getBytes()));
-//                    XposedBridge.log("[arg" + i + "]:\r\n" + HexDumper.dumpHexString(param.args[i].toString().getBytes()));
-//                    continue;
-//                }
-//
-//                XposedBridge.log("[arg" + i + "]:\r\n" + param.args[i].toString());
-//            }
-
-            XposedBridge.log("[Ret]:" + param.getResult());
+            if(param.getResult().getClass().getSimpleName().equals("byte[]"))
+            {
+                XposedBridge.log("> ret_hex:" + HexDumper.toHexString((byte[])param.getResult()));
+                XposedBridge.log("> ret_byte:\r\n" + HexDumper.dumpHexString((byte[])param.getResult()));
+            }
+            else
+                XposedBridge.log("> ret_str:" + param.getResult().toString());
         }
     };
 
