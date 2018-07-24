@@ -1,4 +1,4 @@
 package_name:com.ss.android.ugc.aweme
-class_name:com.ss.android.common.applog.j
-function_name:a
-args_type:byte[]
+class_name:com.ss.android.common.applog.UserInfo
+function_name:getUserInfo
+args_type:int,String,String[]

@@ -24,33 +24,6 @@ public class Main implements IXposedHookLoadPackage
 {
     private static final String CONFIG = "//data//local//tmp//config.txt";
 
-    public Class string_to_class(String type)
-    {
-        switch(type)
-        {
-            case "int":     return int.class;
-            case "short":   return short.class;
-            case "long":    return long.class;
-            case "float":   return float.class;
-            case "double":  return double.class;
-
-            case "byte":    return byte.class;
-            case "byte[]":  return byte[].class;
-
-            case "Map":     return Map.class;
-            case "char":    return char.class;
-            case "String":  return String.class;
-            case "boolean": return boolean.class;
-            case "String[]":return String[].class;
-
-            case "Context": return Context.class;
-            case "Bundle":  return Bundle.class;
-
-            default:        return null;
-        }
-    }
-
-
     public XC_MethodHook callback_fun = new XC_MethodHook()
     {
         protected void beforeHookedMethod(MethodHookParam param) throws Throwable
@@ -61,6 +34,16 @@ public class Main implements IXposedHookLoadPackage
                 {
                     XposedBridge.log("> arg_" + i + "_hex:" + HexDumper.toHexString((byte[])param.args[i]));
                     XposedBridge.log("> arg_" + i + "_byte:\r\n" + HexDumper.dumpHexString((byte[])param.args[i]));
+                }
+                else if (param.args[i].getClass().getSimpleName().equals("String[]"))
+                {
+                    StringBuffer stringBuffer = new StringBuffer();
+                    String[] strings = (String[]) param.args[i];
+
+                    for (int x = 0; x < strings.length; x++)
+                        stringBuffer.append("\"" + strings[x] + "\", ");
+
+                    XposedBridge.log("> arg_" + i + "_str_arry:" + stringBuffer.toString());
                 }
                 else
                     XposedBridge.log("> arg_" + i + "_str:" + param.args[i].toString());
@@ -167,6 +150,31 @@ public class Main implements IXposedHookLoadPackage
             return;
 
         findAndHookMethod(class_name, lpparam.classLoader, function_name, args_obj);
+    }
+
+    public Class string_to_class(String type)
+    {
+        switch(type)
+        {
+            case "int":     return int.class;
+            case "short":   return short.class;
+            case "long":    return long.class;
+            case "float":   return float.class;
+            case "double":  return double.class;
+
+            case "Map":     return Map.class;
+            case "char":    return char.class;
+            case "byte":    return byte.class;
+            case "byte[]":  return byte[].class;
+            case "String":  return String.class;
+            case "String[]":return String[].class;
+
+            case "Bundle":  return Bundle.class;
+            case "Context": return Context.class;
+            case "boolean": return boolean.class;
+
+            default:        return null;
+        }
     }
 }
 

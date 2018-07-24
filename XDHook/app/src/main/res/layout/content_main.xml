@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="add by xk XDHook v1.0"
+        android:text="add by xk XDHook v1.0\n\n技术交流QQ群 : 35695300"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.301"
         app:layout_constraintLeft_toLeftOf="parent"
