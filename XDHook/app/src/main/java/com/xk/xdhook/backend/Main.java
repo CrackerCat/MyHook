@@ -24,6 +24,7 @@ public class Main implements IXposedHookLoadPackage
 {
     private static final String CONFIG = "//data//local//tmp//config.txt";
 
+
     public XC_MethodHook callback_fun = new XC_MethodHook()
     {
         protected void beforeHookedMethod(MethodHookParam param) throws Throwable
@@ -65,6 +66,32 @@ public class Main implements IXposedHookLoadPackage
                 XposedBridge.log("> ret_str:" + param.getResult().toString());
         }
     };
+
+    public Class string_to_class(String type)
+    {
+        switch(type)
+        {
+            case "int":     return int.class;
+            case "short":   return short.class;
+            case "long":    return long.class;
+            case "float":   return float.class;
+            case "double":  return double.class;
+
+            case "byte":    return byte.class;
+            case "byte[]":  return byte[].class;
+
+            case "Map":     return Map.class;
+            case "char":    return char.class;
+            case "String":  return String.class;
+            case "boolean": return boolean.class;
+            case "String[]":return String[].class;
+
+            case "Context": return Context.class;
+            case "Bundle":  return Bundle.class;
+
+            default:        return null;
+        }
+    }
 
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable
     {
@@ -141,40 +168,17 @@ public class Main implements IXposedHookLoadPackage
         args_obj[pos] = callback_fun;
 
         XposedBridge.log("````````````````````````````````````````````````````````````````````````````````");
-        XposedBridge.log("package_name:" + package_name);
-        XposedBridge.log("class_name:" + class_name);
-        XposedBridge.log("function_name:" + function_name);
-        XposedBridge.log("args_type:" + args_type);
+        XposedBridge.log("> package_name:" + package_name);
+        XposedBridge.log("> class_name:" + class_name);
+        XposedBridge.log("> function_name:" + function_name);
+        XposedBridge.log("> args_type:" + args_type);
 
         if (!lpparam.packageName.equals(package_name))
             return;
 
+        XposedBridge.log("package_name:" + lpparam.packageName);
+
         findAndHookMethod(class_name, lpparam.classLoader, function_name, args_obj);
-    }
-
-    public Class string_to_class(String type)
-    {
-        switch(type)
-        {
-            case "int":     return int.class;
-            case "short":   return short.class;
-            case "long":    return long.class;
-            case "float":   return float.class;
-            case "double":  return double.class;
-
-            case "Map":     return Map.class;
-            case "char":    return char.class;
-            case "byte":    return byte.class;
-            case "byte[]":  return byte[].class;
-            case "String":  return String.class;
-            case "String[]":return String[].class;
-
-            case "Bundle":  return Bundle.class;
-            case "Context": return Context.class;
-            case "boolean": return boolean.class;
-
-            default:        return null;
-        }
     }
 }
 
