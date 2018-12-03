@@ -1,0 +1,4 @@
+package_name:com.xingin.xhs
+class_name:com.xingin.skynet.AddCommonHeaderInterceptor
+function_name:a
+args_type:byte[]
