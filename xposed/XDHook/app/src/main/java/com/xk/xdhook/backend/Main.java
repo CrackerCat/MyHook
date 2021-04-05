@@ -8,8 +8,8 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-import android.app.Application;
 import android.os.Bundle;
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 
@@ -55,9 +55,9 @@ public class Main implements IXposedHookLoadPackage
                     XposedBridge.log("> arg_" + i + "_str:" + param.args[i].toString());
             }
 
-            RuntimeException e = new RuntimeException("run is here");
-            e.fillInStackTrace();
-            XposedBridge.log("> StackTrace:\r\n" + e);
+//            RuntimeException e = new RuntimeException("run is here");
+//            e.fillInStackTrace();
+//            XposedBridge.log("> StackTrace:\r\n" + e);
         }
 
         protected void afterHookedMethod(MethodHookParam param) throws Throwable
@@ -69,6 +69,7 @@ public class Main implements IXposedHookLoadPackage
             }
             else
                 XposedBridge.log("> ret_str:" + param.getResult().toString());
+            XposedBridge.log(" ");
         }
     };
 
@@ -88,8 +89,11 @@ public class Main implements IXposedHookLoadPackage
             case "Map":     return Map.class;
             case "char":    return char.class;
             case "String":  return String.class;
-            case "boolean": return boolean.class;
             case "String[]":return String[].class;
+            case "boolean": return boolean.class;
+
+            case "Object":  return Object.class;
+            case "Object[]":return Object[].class;
 
             case "Context": return Context.class;
             case "Bundle":  return Bundle.class;
