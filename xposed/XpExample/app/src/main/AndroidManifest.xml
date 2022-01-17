@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         
-        <activity android:name=".MainActivity">
+        <activity android:name=".frontend.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +28,7 @@
             android:value="true" />
         <meta-data
             android:name="xposeddescription"
-            android:value="add by xk XpExample v1.0" />
+            android:value="K4NG Hook 汇总" />
         <meta-data
             android:name="xposedminversion"
             android:value="54" />

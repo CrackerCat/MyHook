@@ -1,4 +1,4 @@
-package_name:com.MobileTicket
-class_name:com.alibaba.wireless.security.mainplugin.a
-function_name:doCommand
-args_type:int,Object[]
+package_name:com.dianping.v1
+class_name:com.dianping.nvnetwork.tunnel.Encrypt.SocketSecureManager
+function_name:decryptData
+args_type:byte[],String
