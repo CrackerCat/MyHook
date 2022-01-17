@@ -6,7 +6,7 @@ frida
 xposed  
   
 ## Native Hook
-Inject
-Injectso
+Inject  
+Injectso  
 got-hook  
 inline-hook  
