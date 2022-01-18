@@ -10,7 +10,10 @@ public class MainHook implements IXposedHookLoadPackage
         if (!lpparam.packageName.equals("com.dianping.v1"))
             return;
 
-        DianPingHook dp = new DianPingHook();
-        dp.HookNetMoudle(lpparam);
+        DianPingHook DianPing = new DianPingHook();
+        DianPing.HookNetMoudle(lpparam);
+
+//        OkHttpHook OkHttp = new OkHttpHook();
+//        OkHttp.HookOkHttpMoudle(lpparam);
     }
 }
