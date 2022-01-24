@@ -12,17 +12,32 @@ public class MainHook implements IXposedHookLoadPackage
     {
         XLog.init(LogLevel.ALL);
 
+        // 大众点评
         if (lpparam.packageName.equals("com.dianping.v1"))
         {
             DianPingHook DianPing = new DianPingHook();
-            DianPing.hook_decryptData(lpparam.classLoader);
+            DianPing.hook_g_dec(lpparam.classLoader);
+            DianPing.hook_a_aes(lpparam.classLoader);
+            DianPing.hook_toString(lpparam.classLoader);
+            // DianPing.hook_decryptData(lpparam.classLoader);
         }
 
+        // 美团
         if (lpparam.packageName.equals("com.sankuai.meituan"))
         {
             MeituanHook Meitun = new MeituanHook();
             Meitun.tcp_downgrade_http(lpparam.classLoader);
             Meitun.monitor_okttp(lpparam.classLoader);
+        }
+
+        // 美团外卖
+        if(lpparam.packageName.equals("com.sankuai.meituan.takeoutnew"))
+        {
+            MeituanWaiMaiHook Waimai = new MeituanWaiMaiHook();
+            Waimai.hook_siua(lpparam.classLoader);
+            // Waimai.hook_encrypt(lpparam.classLoader);
+            // Waimai.hook_encryptByte(lpparam.classLoader);
+            // Waimai.hook_decrypt(lpparam.classLoader);
         }
     }
 }

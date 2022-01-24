@@ -1,40 +1,17 @@
-import frida, sys
+﻿import sys
+import time
+import frida
 
-def on_message(message, data):
-    if message['type'] == 'send':
-        print("[*] {0}".format(message['payload']))
-    else:
-        print(message)
+def on_message(message,data):
+    print("message",message)
+    print("data",data)
 
-jscode = """
-Java.perform(function () 
-{
-  // Function to hook is defined here
-  var MainActivity = Java.use('com.example.seccon2015.rock_paper_scissors.MainActivity');
+device = frida.get_usb_device()
+session = device.attach("AndroidDemo")
 
-  // Whenever button is clicked
-  var onClick = MainActivity.onClick;
-  onClick.implementation = function (v) {
-    // Show a message to know that the function got called
-    send('onClick');
+with open("./hook.js","r") as f:
+    script = session.create_script(f.read())
 
-    // Call the original onClick handler
-    onClick.call(this, v);
-
-    // Set our values after running the original onClick handler
-    this.m.value = 0;
-    this.n.value = 1;
-    this.cnt.value = 999;
-
-    // Log to the console that it's done, and we should have the flag!
-    console.log('Done:' + JSON.stringify(this.cnt));
-  };
-});
-"""
-
-process = frida.get_usb_device().attach('com.example.seccon2015.rock_paper_scissors')
-script = process.create_script(jscode)
-script.on('message', on_message)
-print('[*] Running CTF')
+script.on("message",on_message)
 script.load()
 sys.stdin.read()
