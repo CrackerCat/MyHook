@@ -3,13 +3,15 @@
 	源码：https://github.com/frida/frida
 
 ## 环境搭建
-	// 安装
+	// 安装运行
 	$ push FridaSrv /data/local/tmp/
 	$ chmod 7755 /data/local/tmp/FridaSrv
 	$ ./FridaSrv
-	// 运行
+	
+	// 开始Hook
 	$ frida-ps -U
-	$ frida-trace -U -i open com.android.chrome
+	$ frida -U pkgName -l hook.js
+	$ frida-trace -U -i open pkgName
       Attaching...
 	  Resolving functions...
 	  Instrumenting functions...
