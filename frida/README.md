@@ -17,12 +17,15 @@
 	  Started tracing 1 function. Press Ctrl+C to stop.
 
 ## Frida Hook Java
-	hook Java层函数
-	修改函数参数和返回值
-	主动调用静态函数和非晶态函数
-	设置成员变量的值
+	打印参数
+	修改返回
+	主动调用
+	  静态函数
+	  非静态函数
+	修改成员变量
 	Hook内部类
 	Hook动态加载Dex
+	--------------
 	Frida spawn 启动App
 	调用系统库函数
 	Hook 构造函数
