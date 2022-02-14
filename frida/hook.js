@@ -1,3 +1,31 @@
+function hook_mtwaimai() 
+{
+    Java.perform(function () 
+    {
+        var SIUACollector = Java.use("com.meituan.android.common.mtguard.NBridge&SIUACollector");
+        SIUACollector.startCollection.implementation = function () 
+        {
+            var result = this.startCollection();
+            console.log("SIUACollector.startCollection() result:", result);
+            return result;
+        };
+        console.log("hook_mtwaimai");
+    });
+}
+
+function hook_InnerClasses() 
+{
+    // Hook内部类修改返回结果
+    Java.perform(function () 
+    {
+        var InnerClasses = Java.use("com.example.androiddemo.Activity.FridaActivity4$InnerClasses");
+        InnerClasses.check1.implementation = function () 
+        {
+            return true;
+        };
+    });
+}
+
 // 打印参数 修改返回
 // Java.use(); 查找类
 // class.fun_name.overload(arg_type).implementation = function(arg_type){ this.fun_name() }; 模拟方法
@@ -237,7 +265,7 @@ function hook_mul_class()
 
 function main() 
 {
-    hook_java();
+    hook_mtwaimai();
 }
 
 setImmediate(main);

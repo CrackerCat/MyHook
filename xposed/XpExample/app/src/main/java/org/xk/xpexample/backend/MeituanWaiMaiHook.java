@@ -9,6 +9,31 @@ import de.robv.android.xposed.XposedHelpers;
 
 class MeituanWaiMaiHook
 {
+    // 拦截返回结果
+    public void hook_collection(final ClassLoader classLoader)
+    {
+        try
+        {
+            String class_name = "com.meituan.android.common.mtguard.NBridge$SIUACollector";
+            XposedHelpers.findAndHookMethod(class_name, classLoader, "startCollection", new XC_MethodHook()
+            {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable
+                {
+                    super.afterHookedMethod(param);
+                    XLog.d("startCollection ret:" + param.getResult());
+                }
+            });
+            XLog.d("startCollection hook sucended!");
+        }
+        catch(Throwable e)
+        {
+            XLog.d("startCollection hook error!" + e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
     // 环境检测
     public void anti_env_check(final ClassLoader classLoader)
     {
@@ -183,7 +208,7 @@ class MeituanWaiMaiHook
         }
         catch(Throwable e)
         {
-            XLog.d("anti_env_check" + e.getMessage());
+            XLog.d("anti_env_check hook error!" + e.getMessage());
             e.printStackTrace();
         }
     }

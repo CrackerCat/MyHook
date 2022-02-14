@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/XDHook.iml" filepath="$PROJECT_DIR$/XDHook.iml" group="XDHook" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/XDHook-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/XDHook-app.iml" group="XDHook/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="XDHook/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/xposed-XDHook.iml" filepath="$PROJECT_DIR$/.idea/modules/xposed-XDHook.iml" group="XDHook" />
     </modules>
   </component>
 </project>

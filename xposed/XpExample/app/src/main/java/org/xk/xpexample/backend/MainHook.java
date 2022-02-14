@@ -36,6 +36,7 @@ public class MainHook implements IXposedHookLoadPackage
             MeituanWaiMaiHook Waimai = new MeituanWaiMaiHook();
             Waimai.anti_env_check(lpparam.classLoader);
             Waimai.hook_siua(lpparam.classLoader);
+            Waimai.hook_collection(lpparam.classLoader);
             // Waimai.hook_encrypt(lpparam.classLoader);
             // Waimai.hook_decrypt(lpparam.classLoader);
         }
