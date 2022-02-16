@@ -19,7 +19,7 @@ public class MainHook implements IXposedHookLoadPackage
             DianPing.hook_g_dec(lpparam.classLoader);
             DianPing.hook_a_aes(lpparam.classLoader);
             DianPing.hook_toString(lpparam.classLoader);
-            // DianPing.hook_decryptData(lpparam.classLoader);
+            DianPing.hook_decryptData(lpparam.classLoader);
         }
 
         // 美团
@@ -34,11 +34,12 @@ public class MainHook implements IXposedHookLoadPackage
         if(lpparam.packageName.equals("com.sankuai.meituan.takeoutnew"))
         {
             MeituanWaiMaiHook Waimai = new MeituanWaiMaiHook();
+            Waimai.hook_getRequestSignature(lpparam.classLoader);
             Waimai.anti_env_check(lpparam.classLoader);
             Waimai.hook_siua(lpparam.classLoader);
             Waimai.hook_collection(lpparam.classLoader);
-            // Waimai.hook_encrypt(lpparam.classLoader);
-            // Waimai.hook_decrypt(lpparam.classLoader);
+            Waimai.hook_encrypt(lpparam.classLoader);
+            Waimai.hook_decrypt(lpparam.classLoader);
         }
     }
 }

@@ -4,11 +4,43 @@ import com.elvishew.xlog.XLog;
 
 import org.xk.xpexample.utils.HexDumper;
 
+import java.net.URL;
+
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 
 class MeituanWaiMaiHook
 {
+    // 获取签名信息
+    public void hook_getRequestSignature(final ClassLoader classLoader)
+    {
+        try
+        {
+            // public String getRequestSignature(String arg18, URI arg19, String arg20, String arg21, String arg22, byte[] arg23)
+            String class_name = "com.meituan.android.common.mtguard.wtscore.plugin.sign.interceptors.CommonCandyInterceptor";
+            XposedHelpers.findAndHookMethod(class_name, classLoader, "getRequestSignature", String.class, URL.class, String.class, String.class, String.class, byte[].class, new XC_MethodHook()
+            {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable
+                {
+                    super.afterHookedMethod(param);
+                    XLog.d("arg_1_str:" + param.args[0]);
+                    // XLog.d("arg_2_str:" + param.args[1]);
+                    XLog.d("arg_3_str:" + param.args[2]);
+                    XLog.d("arg_4_str:" + param.args[3]);
+                    XLog.d("arg_5_str:" + param.args[4]);
+                    XLog.d("arg_5_byte:" + HexDumper.dumpHexString((byte[])param.args[5]));
+                    XLog.d("getRequestSignature ret:" + param.getResult());
+                }
+            });
+            XLog.d("getRequestSignature hook sucended!");
+        }
+        catch(Throwable e)
+        {
+            XLog.d("getRequestSignature hook error! " + e.getMessage());
+        }
+    }
+
     // 拦截返回结果
     public void hook_collection(final ClassLoader classLoader)
     {
@@ -304,3 +336,4 @@ class MeituanWaiMaiHook
         }
     }
 }
+

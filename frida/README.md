@@ -47,6 +47,11 @@
 	
 ## Frida 辅助分析OLLVM字符串加密
 	.init_arry 里的字符串加密函数
+		.init_array里面的一些函数来解密字符串
+		hook RegisterNatives
+		inline hook
+		hook dlopen
+
 	完善hook libart
 	Frida inline hook
 	
