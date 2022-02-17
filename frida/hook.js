@@ -1,65 +1,37 @@
-function hook_mtwaimai() 
+// 打印参数 
+function hook_LoginActivity() 
 {
-    Java.perform(function () 
+    Java.perform(function() 
     {
-        var SIUACollector = Java.use("com.meituan.android.common.mtguard.NBridge&SIUACollector");
-        SIUACollector.startCollection.implementation = function () 
-        {
-            var result = this.startCollection();
-            console.log("SIUACollector.startCollection() result:", result);
-            return result;
-        };
-        console.log("hook_mtwaimai");
-    });
-}
-
-function hook_InnerClasses() 
-{
-    // Hook内部类修改返回结果
-    Java.perform(function () 
-    {
-        var InnerClasses = Java.use("com.example.androiddemo.Activity.FridaActivity4$InnerClasses");
-        InnerClasses.check1.implementation = function () 
-        {
-            return true;
-        };
-    });
-}
-
-// 打印参数 修改返回
-// Java.use(); 查找类
-// class.fun_name.overload(arg_type).implementation = function(arg_type){ this.fun_name() }; 模拟方法
-function hook_java() 
-{
-    Java.perform(function () 
-    {
-        // 打印参数
         var LoginActivity = Java.use("com.example.androiddemo.Activity.LoginActivity");
         LoginActivity.a.overload('java.lang.String', 'java.lang.String').implementation = function (str, str2) 
         {
             var result = this.a(str, str2);
             console.log("LoginActivity.a:", str, str2, result);
-            return result;
+            return "admin";
         };
+    });
+    console.log("LoginActivity Hook~~")
+}
 
-        // 修改返回 (不用调用 不用构造函数)
+// 修改返回
+function hook_FridaActivity1()
+{
+    Java.perform(function()
+    {
         var FridaActivity1 = Java.use("com.example.androiddemo.Activity.FridaActivity1");
         FridaActivity1.a.implementation = function (barr) 
         {
-            console.log("FridaActivity1.a");
             return "R4jSLLLLLLLLLLOrLE7/5B+Z6fsl65yj6BgC6YWz66gO6g2t65Pk6a+P65NK44NNROl0wNOLLLL=";
         };
-
-        console.log("hook_java");
     });
+    console.log("FridaActivity1 Hook~~")
 }
 
 // 主动调用
-// class.fun_name()
-// Java.choose(class, { onMatch:function(instance){},  onComplete:function(){} });
-function call_FridaActivity2() 
+function hook_FridaActivity2() 
 {
-    Java.perform(function () 
+    Java.perform(function() 
     {
         // 调用 静态函数
         var FridaActivity2 = Java.use("com.example.androiddemo.Activity.FridaActivity2");
@@ -79,12 +51,11 @@ function call_FridaActivity2()
             }
         });
     });
+    console.log("FridaActivity2 Hook~~~")
 }
 
 // 修改成员变量
-// class.class_value.value = true;
-// Java.choose(class, { onMatch:function(instance){}, onComplete:function(){} });
-function call_FridaActivity3() 
+function hook_FridaActivity3() 
 {
     Java.perform(function () 
     {
@@ -112,52 +83,48 @@ function call_FridaActivity3()
 }
 
 // Hook内部类
-// Java.perform(function(){})
-function hook_InnerClasses() 
+function hook_FridaActivity4() 
 {
-    // Hook内部类修改返回结果
     Java.perform(function () 
     {
         var InnerClasses = Java.use("com.example.androiddemo.Activity.FridaActivity4$InnerClasses");
-        InnerClasses.check1.implementation = function () 
+        InnerClasses.check1.implementation = function() 
+        {
+            return true;
+        };
+        
+        InnerClasses.check2.implementation = function()
+        {
+            return true;
+        };
+        
+        InnerClasses.check3.implementation = function()
+        {
+            return true;
+        };
+        
+        InnerClasses.check4.implementation = function()
+        {
+            return true;
+        };
+        
+        InnerClasses.check5.implementation = function()
+        {
+            return true;
+        };
+        
+        InnerClasses.check6.implementation = function()
         {
             return true;
         };
     });
-}
-
-// Hook动态加载
-// Java.perform(function(){})
-function hook_mul_function() 
-{
-    Java.perform(function () 
-    {
-        // Hook所有类成员函数
-        var class_name = "com.example.androiddemo.Activity.FridaActivity4$InnerClasses";
-        var InnerClasses = Java.use(class_name);
-        var all_methods = InnerClasses.class.getDeclaredMethods();  // 拿到所有类成员函数
-
-        for (var i = 0; i < all_methods.length; i++) 
-        {
-            var method = (all_methods[i]);
-            var methodStr = method.toString();
-            var substring = methodStr.substr(methodStr.indexOf(class_name) + class_name.length + 1);
-            var methodname = substring.substr(0, substring.indexOf("("));
-            console.log(methodname);
-
-            InnerClasses[methodname].implementation = function () 
-            {
-                console.log("hook_mul_function:", this);
-                return true;
-            }
-        }
-    });
+    console.log("FridaActivity4$InnerClasses Hook~~~");
 }
 
 
 function hook_dyn_dex() 
 {
-    Java.perform(function () 
+    Java.perform(function() 
     {
         var FridaActivity5 = Java.use("com.example.androiddemo.Activity.FridaActivity5");
         Java.choose("com.example.androiddemo.Activity.FridaActivity5", 
@@ -265,7 +232,12 @@ function hook_mul_class()
 
 function main() 
 {
-    hook_mtwaimai();
+    // hook_LoginActivity();
+    // hook_FridaActivity1();
+    // hook_FridaActivity2();
+    // hook_FridaActivity3();
+    hook_FridaActivity4();
+    // hook_FridaActivity6();
 }
 
 setImmediate(main);
