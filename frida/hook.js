@@ -121,60 +121,43 @@ function hook_FridaActivity4()
     console.log("FridaActivity4$InnerClasses Hook~~~");
 }
 
-
-function hook_dyn_dex() 
-{
-    Java.perform(function() 
-    {
+function hook_dyn_dex() {
+    Java.perform(function () {
         var FridaActivity5 = Java.use("com.example.androiddemo.Activity.FridaActivity5");
-        Java.choose("com.example.androiddemo.Activity.FridaActivity5", 
-        {
-            onMatch: function (instance) 
-            {
+        Java.choose("com.example.androiddemo.Activity.FridaActivity5", {
+            onMatch: function (instance) {
                 console.log(instance.getDynamicDexCheck().$className);
-            }, 
-            
-            onComplete: function () 
-            {
+            }, onComplete: function () {
 
             }
         });
 
 
         //hook 动态加载的dex
-        Java.enumerateClassLoaders(
-        {
-            onMatch: function (loader) 
-            {
-                try 
-                {
-                    if (loader.findClass("com.example.androiddemo.Dynamic.DynamicCheck")) 
-                    {
+        Java.enumerateClassLoaders({
+            onMatch: function (loader) {
+                try {
+                    if (loader.findClass("com.example.androiddemo.Dynamic.DynamicCheck")) {
                         console.log(loader);
-                        Java.classFactory.loader = loader;      // 切换 classloader
+                        Java.classFactory.loader = loader;      //切换classloader
                     }
-                } 
-                catch (error) 
-                {
+                } catch (error) {
 
                 }
-            }, 
-            
-            onComplete: function () 
-            {
+
+            }, onComplete: function () {
 
             }
         });
 
         var DynamicCheck = Java.use("com.example.androiddemo.Dynamic.DynamicCheck");
         console.log(DynamicCheck);
-        
-        DynamicCheck.check.implementation = function () 
-        {
+        DynamicCheck.check.implementation = function () {
             console.log("DynamicCheck.check");
             return true;
         }
     });
+    console.log("FridaActivity5 Hook~~");
 }
 
 function hook_FridaActivity6() 
@@ -236,8 +219,10 @@ function main()
     // hook_FridaActivity1();
     // hook_FridaActivity2();
     // hook_FridaActivity3();
-    hook_FridaActivity4();
+    // hook_FridaActivity4();
+    // hook_FridaActivity5();
     // hook_FridaActivity6();
+    hook_dyn_dex();
 }
 
 setImmediate(main);
